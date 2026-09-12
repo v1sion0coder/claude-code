@@ -8,7 +8,8 @@
     --amber:#c9781f;
     --profit:#227a52; --profit-bg:#e7f3ec;
     --loss:#b23b3b; --loss-bg:#f6e9e7;
-    --s1:#e8833a; --s2:#1f9e8f; --s3:#3b6fe0; /* Semrush / HubSpot / NordVPN */
+    --s1:#e8833a; --s2:#1f9e8f; --s3:#c2456a; --s4:#3b6fe0; --s5:#3f9e4a;
+    --ad:#7a6f52;
     --grid:#ece9e3;
     --shadow:0 1px 2px rgba(30,35,41,.04),0 4px 16px rgba(30,35,41,.06);
     --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -24,7 +25,8 @@
       --amber:#e2a15a;
       --profit:#4fc186; --profit-bg:#16281f;
       --loss:#e07a70; --loss-bg:#2a1a19;
-      --s1:#e58a3c; --s2:#3dbbaa; --s3:#6d9bf0;
+      --s1:#e8934a; --s2:#35bfa6; --s3:#ea5c79; --s4:#6d9bf0; --s5:#57b85f;
+      --ad:#b8a878;
       --grid:#262c32;
       --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
     }
@@ -37,7 +39,8 @@
     --amber:#e2a15a;
     --profit:#4fc186; --profit-bg:#16281f;
     --loss:#e07a70; --loss-bg:#2a1a19;
-    --s1:#e58a3c; --s2:#3dbbaa; --s3:#6d9bf0;
+    --s1:#e8934a; --s2:#35bfa6; --s3:#ea5c79; --s4:#6d9bf0; --s5:#57b85f;
+    --ad:#b8a878;
     --grid:#262c32;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
   }
@@ -52,10 +55,11 @@
   .disclaimer{margin-top:18px;border:1px solid var(--border);border-left:3px solid var(--amber);
     background:var(--surface-2);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--muted);max-width:80ch}
   .disclaimer b{color:var(--ink)}
-  .grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;margin-top:26px;align-items:start}
-  @media (max-width:820px){.grid{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:22px;margin-top:26px;align-items:start}
+  @media (max-width:860px){.grid{grid-template-columns:1fr}}
   .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
   .panel h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:14px}
+  .panel h2 .lc{text-transform:none;letter-spacing:0;font-weight:400;color:var(--faint)}
   .control{margin-bottom:16px}
   .control:last-child{margin-bottom:0}
   .control .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
@@ -64,39 +68,48 @@
   .control .hint{font-size:12px;color:var(--faint);margin-top:5px}
   input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:pointer}
   .divider{height:1px;background:var(--border);margin:18px -18px}
+  .toggles{display:flex;flex-wrap:wrap;gap:8px}
+  .tg{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 10px;border:1px solid var(--border-strong);
+    border-radius:20px;cursor:pointer;background:var(--surface-2);user-select:none}
+  .tg input{accent-color:var(--accent);cursor:pointer;margin:0}
+  .tg .dot{width:9px;height:9px;border-radius:2px;flex:none}
+  .adrow{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:14px;font-weight:500}
+  .adrow input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
   table.assump{width:100%;border-collapse:collapse;font-size:13px}
-  table.assump th{text-align:right;font-weight:600;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:6px 4px;border-bottom:1px solid var(--border)}
+  table.assump th{text-align:right;font-weight:600;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:6px 3px;border-bottom:1px solid var(--border)}
   table.assump th:first-child{text-align:left}
-  table.assump td{padding:5px 4px;border-bottom:1px solid var(--border)}
+  table.assump td{padding:5px 3px;border-bottom:1px solid var(--border)}
   table.assump td:first-child{text-align:left}
-  .prog-name{display:flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap}
+  .prog-name{display:flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap;font-size:12.5px}
   .dot{width:10px;height:10px;border-radius:3px;flex:none}
-  table.assump input{width:64px;font-family:var(--mono);font-size:13px;text-align:right;padding:4px 6px;
+  table.assump input{width:52px;font-family:var(--mono);font-size:12.5px;text-align:right;padding:4px 5px;
     border:1px solid var(--border-strong);border-radius:6px;background:var(--surface-2);color:var(--ink);font-variant-numeric:tabular-nums}
   table.assump input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   .results{display:flex;flex-direction:column;gap:22px;min-width:0}
-  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  @media (max-width:560px){.tiles{grid-template-columns:1fr}}
-  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px;box-shadow:var(--shadow);border-top:3px solid var(--tc,var(--accent))}
-  .tile .tname{display:flex;align-items:center;gap:7px;font-weight:600;font-size:14px}
-  .tile .big{font-family:var(--mono);font-weight:600;font-size:26px;letter-spacing:-.02em;margin-top:10px;font-variant-numeric:tabular-nums;line-height:1}
-  .tile .sub{font-size:12.5px;color:var(--muted);margin-top:8px;display:flex;justify-content:space-between;gap:6px}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:620px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:420px){.tiles{grid-template-columns:1fr}}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);border-top:3px solid var(--tc,var(--accent))}
+  .tile .tname{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px}
+  .tile .big{font-family:var(--mono);font-weight:600;font-size:23px;letter-spacing:-.02em;margin-top:9px;font-variant-numeric:tabular-nums;line-height:1}
+  .tile .sub{font-size:12px;color:var(--muted);margin-top:7px;display:flex;justify-content:space-between;gap:6px}
   .tile .sub b{color:var(--ink);font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
-  .badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:10px}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:9px}
   .badge.p{background:var(--profit-bg);color:var(--profit)}
   .badge.l{background:var(--loss-bg);color:var(--loss)}
+  .badge.n{background:var(--surface-2);color:var(--muted)}
   .chartcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
-  .chartcard .chead{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px}
   .chartcard h3{font-family:var(--serif);font-weight:600;font-size:19px}
-  .chartcard .csub{font-size:12.5px;color:var(--muted)}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 2px;font-size:13px}
+  .chartcard .csub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 2px;font-size:12.5px}
   .legend span{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
   .legend .dot{border-radius:2px}
+  .legend .dash{width:14px;height:0;border-top:2px dashed var(--ad)}
   .chartbox{position:relative;width:100%}
   svg{display:block;width:100%;height:auto;overflow:visible}
   #chart text{font-family:var(--mono);fill:var(--muted)}
   .tooltip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--border-strong);
-    border-radius:9px;padding:9px 11px;font-size:12.5px;box-shadow:var(--shadow);opacity:0;transition:opacity .1s;min-width:150px;z-index:5}
+    border-radius:9px;padding:9px 11px;font-size:12.5px;box-shadow:var(--shadow);opacity:0;transition:opacity .1s;min-width:158px;z-index:5}
   .tooltip .tt-m{font-weight:600;margin-bottom:6px;font-size:12px;color:var(--faint)}
   .tooltip .tt-r{display:flex;align-items:center;gap:7px;justify-content:space-between;margin-top:3px}
   .tooltip .tt-l{display:inline-flex;align-items:center;gap:6px}
@@ -109,7 +122,6 @@
   .flow li::before{content:counter(step);flex:none;width:26px;height:26px;border-radius:8px;background:var(--surface-2);
     border:1px solid var(--border);color:var(--accent-ink);font-family:var(--mono);font-weight:600;font-size:13px;
     display:grid;place-items:center;margin-top:1px}
-  .flow li b{font-weight:600}
   .flow li span{font-size:14px;color:var(--muted)}
   .flow li span b{color:var(--ink)}
   footer{margin-top:30px;font-size:12px;color:var(--faint);text-align:center}
@@ -122,9 +134,9 @@
   <header>
     <div class="eyebrow">Партнёрский маркетинг · US / Global</div>
     <h1>Сколько и на чём можно заработать</h1>
-    <p class="lede">Прикидка дохода по трём отобранным программам — Semrush, HubSpot и NordVPN. Крути ползунки трафика и конверсии слева и смотри, когда каждая программа выходит в плюс. Цифры под каждую программу можно править в таблице.</p>
+    <p class="lede">Модель дохода по отобранным программам — SaaS, no-code и VPN — плюс отдельный слой дохода с рекламы (YouTube + блог). Крути ползунки трафика и воронки, включай/выключай программы и смотри, когда каждая выходит в плюс за 12 месяцев.</p>
     <div class="disclaimer">
-      <b>Это модель, а не обещание.</b> Клиент платит <b>сервису</b> за продукт (SEO-инструмент, CRM, VPN), а сервис платит тебе комиссию — ты денег с клиента не берёшь. Ставки взяты из вторичных источников и требуют подтверждения в личном кабинете. Реальные конверсии узнаешь только по факту — вноси их в <b>revenue.csv</b>.
+      <b>Это модель, а не обещание.</b> Клиент платит <b>сервису</b> за продукт, а сервис платит тебе комиссию — с клиента ты денег не берёшь. Ставки — из вторичных источников, требуют подтверждения в кабинете. Реальные конверсии узнаешь только по факту (в <b>revenue.csv</b>). Первые месяцы почти всегда в минусе — это норма.
     </div>
   </header>
 
@@ -135,39 +147,51 @@
       <div class="control">
         <div class="row"><label for="visitors">Посетителей в месяц (на 1 программу)</label><span class="val" id="visitors-v"></span></div>
         <input type="range" id="visitors" min="200" max="20000" step="100" value="3000">
-        <div class="hint">Сколько людей видят твой контент по этой теме за месяц (стартовый уровень).</div>
+        <div class="hint">Сколько людей видят твой контент по теме за месяц (стартовый уровень).</div>
       </div>
       <div class="control">
         <div class="row"><label for="growth">Рост трафика в месяц</label><span class="val" id="growth-v"></span></div>
         <input type="range" id="growth" min="0" max="30" step="1" value="12">
-        <div class="hint">SEO раскачивается со временем — статьи набирают позиции. 10–15% в месяц реалистично на старте.</div>
+        <div class="hint">SEO/канал раскачивается со временем. 10–15%/мес — реалистично на старте.</div>
       </div>
       <div class="control">
         <div class="row"><label for="ctr">Кликают по партнёрской ссылке</label><span class="val" id="ctr-v"></span></div>
         <input type="range" id="ctr" min="1" max="15" step="0.5" value="4">
-        <div class="hint">Доля читателей, которые перешли по твоей ссылке на сайт сервиса.</div>
       </div>
       <div class="control">
         <div class="row"><label for="cvr">Покупают из кликнувших</label><span class="val" id="cvr-v"></span></div>
         <input type="range" id="cvr" min="0.5" max="8" step="0.25" value="2.5">
-        <div class="hint">Доля перешедших, кто оформил платную подписку. Для B2B/SaaS 1–3% — типично.</div>
+        <div class="hint">Для B2B/SaaS 1–3% — типично.</div>
       </div>
 
       <div class="divider"></div>
-      <h2>Экономика программ <span style="text-transform:none;letter-spacing:0;font-weight:400">(правь под факт)</span></h2>
+      <h2>Слой рекламы <span class="lc">(YouTube + блог, стекается сверху)</span></h2>
+      <label class="adrow"><input type="checkbox" id="adon" checked> Учитывать доход с рекламы</label>
+      <div class="control">
+        <div class="row"><label for="rpm">Средний RPM (доход на 1000 показов)</label><span class="val" id="rpm-v"></span></div>
+        <input type="range" id="rpm" min="1" max="25" step="0.5" value="6">
+        <div class="hint">Блог (display-реклама) ~$5–15, YouTube ~$3–10 за 1000. Платят за просмотры, не за продажу — стекается поверх партнёрки. Считается от того же трафика; расходов сверх контента нет.</div>
+      </div>
+
+      <div class="divider"></div>
+      <h2>Программы на графике</h2>
+      <div class="toggles" id="toggles"></div>
+
+      <div class="divider"></div>
+      <h2>Экономика программ <span class="lc">(правь под факт)</span></h2>
       <div style="overflow-x:auto">
       <table class="assump" id="assump">
         <thead><tr>
-          <th>Программа</th><th title="Разовая комиссия за продажу">Разово&nbsp;$</th>
-          <th title="Повторяющаяся комиссия в месяц с одного клиента">Рекур.&nbsp;$/м</th>
-          <th title="Сколько месяцев платят рекуррентную комиссию">Мес.</th>
-          <th title="Разовые расходы на старт">Старт&nbsp;$</th>
-          <th title="Ежемесячные расходы">Расх.&nbsp;$/м</th>
+          <th>Программа</th><th title="Разовая комиссия за продажу">Раз.&nbsp;$</th>
+          <th title="Повторяющаяся комиссия в месяц с одного клиента">Рек.&nbsp;$/м</th>
+          <th title="Сколько месяцев платят рекуррентную комиссию">Мес</th>
+          <th title="Разовые расходы на старт">Ст.&nbsp;$</th>
+          <th title="Ежемесячные расходы">Р.&nbsp;$/м</th>
         </tr></thead>
-        <tbody><!-- filled by JS --></tbody>
+        <tbody></tbody>
       </table>
       </div>
-      <div class="hint" style="margin-top:10px">Semrush — фикс $200 за продажу (разовый доход). HubSpot — 30% в месяц до 12 мес (рекуррентный, ~$15/мес с клиента). NordVPN — ~$24 с первой продажи (гибрид, продления в основном за горизонтом года).</div>
+      <div class="hint" style="margin-top:10px">Semrush — $200 разово. HubSpot — ~$15/мес до 12 мес. NordVPN — ~$24 разово. Webflow — 50% ≈ $12/мес до 12 мес. Shopify — разовый бонус ~$50 за продавца.</div>
     </form>
 
     <!-- RESULTS -->
@@ -175,12 +199,11 @@
       <div class="tiles" id="tiles"></div>
 
       <div class="chartcard">
-        <div class="chead">
-          <div><h3>Накопленная чистая прибыль</h3><div class="csub">Комиссии минус расходы, нарастающим итогом за 12 месяцев</div></div>
-        </div>
+        <h3>Накопленная чистая прибыль</h3>
+        <div class="csub">Комиссии (и реклама) минус расходы, нарастающим итогом за 12 месяцев. Ось X — месяц.</div>
         <div class="legend" id="legend"></div>
         <div class="chartbox">
-          <svg id="chart" viewBox="0 0 720 360" role="img" aria-label="График накопленной чистой прибыли по трём программам за 12 месяцев"></svg>
+          <svg id="chart" viewBox="0 0 720 360" role="img" aria-label="График накопленной чистой прибыли по программам за 12 месяцев"></svg>
           <div class="tooltip" id="tooltip"></div>
         </div>
         <div class="note" id="chartnote"></div>
@@ -189,10 +212,10 @@
       <div class="flow">
         <h3>Откуда берётся доход</h3>
         <ol>
-          <li><span><b>Ты делаешь контент</b> — обзор, сравнение, видео — с твоей партнёрской ссылкой (в ней зашит твой ID).</span></li>
-          <li><span><b>Человек кликает</b> и переходит на сайт сервиса. Cookie/subID запоминает, что он пришёл от тебя.</span></li>
-          <li><span><b>Человек покупает подписку</b> — платит сервису за реальную пользу (инструмент, CRM, VPN), не тебе.</span></li>
-          <li><span><b>Сервис платит тебе комиссию</b> из своей выручки — разово или каждый месяц, пока клиент платит. Вывод на PayPal/банк после холда 30–60 дней.</span></li>
+          <li><span><b>Ты делаешь контент</b> — обзор, сравнение, видео — с твоей партнёрской ссылкой (в ней твой ID).</span></li>
+          <li><span><b>Человек кликает</b> и переходит на сайт сервиса; cookie/subID запоминает, что он от тебя.</span></li>
+          <li><span><b>Человек покупает подписку</b> — платит сервису за пользу, не тебе.</span></li>
+          <li><span><b>Сервис платит комиссию</b> — разово или ежемесячно. Плюс тот же контент даёт <b>доход с рекламы</b> (YouTube/блог) за просмотры.</span></li>
         </ol>
       </div>
     </div>
@@ -209,13 +232,25 @@ const PROGRAMS=[
   {key:"Semrush", color:"var(--s1)", oneTime:200, recur:0,  months:0,  upfront:600, monthly:20},
   {key:"HubSpot", color:"var(--s2)", oneTime:0,   recur:15, months:12, upfront:550, monthly:30},
   {key:"NordVPN", color:"var(--s3)", oneTime:24,  recur:0,  months:0,  upfront:450, monthly:15},
+  {key:"Webflow", color:"var(--s4)", oneTime:0,   recur:12, months:12, upfront:500, monthly:20},
+  {key:"Shopify", color:"var(--s5)", oneTime:50,  recur:0,  months:0,  upfront:500, monthly:20},
 ];
 const MONTHS=12;
+const show={}; PROGRAMS.forEach(p=>show[p.key]=true);
 const $=(id)=>document.getElementById(id);
 const fmtUSD=(n)=>{const s=n<0?"-":"";n=Math.abs(Math.round(n));return s+"$"+n.toLocaleString("en-US");};
 const fmtInt=(n)=>Math.round(n).toLocaleString("ru-RU");
 
-// ---- build assumptions table ----
+// ---- toggles ----
+const tgBox=$("toggles");
+PROGRAMS.forEach(p=>{
+  const l=document.createElement("label");l.className="tg";
+  l.innerHTML=`<input type="checkbox" data-k="${p.key}" checked><span class="dot" style="background:${p.color}"></span>${p.key}`;
+  tgBox.appendChild(l);
+});
+tgBox.addEventListener("change",e=>{const k=e.target.dataset.k;if(k){show[k]=e.target.checked;update();}});
+
+// ---- assumptions table ----
 const tbody=document.querySelector("#assump tbody");
 PROGRAMS.forEach((p,i)=>{
   const tr=document.createElement("tr");
@@ -228,148 +263,138 @@ PROGRAMS.forEach((p,i)=>{
 function readInputs(){
   const g={
     visitors:+$("visitors").value, growth:+$("growth").value/100,
-    ctr:+$("ctr").value/100, cvr:+$("cvr").value/100
+    ctr:+$("ctr").value/100, cvr:+$("cvr").value/100,
+    adOn:$("adon").checked, rpm:+$("rpm").value
   };
   const progs=PROGRAMS.map(p=>({...p}));
   document.querySelectorAll("#assump input").forEach(inp=>{
-    const v=Math.max(0,+inp.value||0); progs[+inp.dataset.i][inp.dataset.f]=v;
+    progs[+inp.dataset.i][inp.dataset.f]=Math.max(0,+inp.value||0);
   });
   return {g,progs};
 }
 
 // ---- model ----
+function monthlyVisitors(g,m){return g.visitors*Math.pow(1+g.growth,m-1);}
 function simulate(g,p){
-  const sales=[]; // sales per month 1..12
+  const sales=[];
+  for(let m=1;m<=MONTHS;m++) sales.push(monthlyVisitors(g,m)*g.ctr*g.cvr);
+  const cum=[-p.upfront]; let totalComm=0;
   for(let m=1;m<=MONTHS;m++){
-    const vis=g.visitors*Math.pow(1+g.growth,m-1);
-    sales.push(vis*g.ctr*g.cvr);
+    let comm=sales[m-1]*p.oneTime;
+    if(p.recur>0 && p.months>0){for(let k=1;k<=m;k++){if(m-k<p.months)comm+=sales[k-1]*p.recur;}}
+    totalComm+=comm; cum.push(cum[m-1]+comm-p.monthly);
   }
-  const cum=[-p.upfront]; // month 0 = only upfront spent
-  let totalComm=0;
-  for(let m=1;m<=MONTHS;m++){
-    let comm=sales[m-1]*p.oneTime;               // one-time on this month's sales
-    if(p.recur>0 && p.months>0){                 // recurring from all live cohorts
-      for(let k=1;k<=m;k++){ if(m-k < p.months) comm+=sales[k-1]*p.recur; }
-    }
-    totalComm+=comm;
-    cum.push(cum[m-1]+comm-p.monthly);
-  }
-  let be=null;
-  for(let m=1;m<=MONTHS;m++){ if(cum[m]>=0){be=m;break;} }
-  const totalSales=sales.reduce((a,b)=>a+b,0);
-  return {cum,totalComm,totalSales,net:cum[MONTHS],be};
+  let be=null; for(let m=1;m<=MONTHS;m++){if(cum[m]>=0){be=m;break;}}
+  return {cum,totalComm,totalSales:sales.reduce((a,b)=>a+b,0),net:cum[MONTHS],be};
+}
+function simulateAd(g){
+  const cum=[0]; let total=0;
+  for(let m=1;m<=MONTHS;m++){const inc=monthlyVisitors(g,m)*g.rpm/1000;total+=inc;cum.push(cum[m-1]+inc);}
+  return {cum,total,net:cum[MONTHS],key:"Реклама",color:"var(--ad)",ad:true};
 }
 
 // ---- chart ----
 const NS="http://www.w3.org/2000/svg";
-const VB={w:720,h:360}, M={t:18,r:70,b:34,l:64};
-function CV(v){ // resolve "var(--x)" to a concrete color (SVG attributes don't parse var())
-  if(typeof v==="string" && v.startsWith("var(")){
-    const name=v.slice(4,-1).trim();
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim()||"#888888";
-  }
-  return v;
-}
-function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
-function niceStep(range){const raw=range/5;const pow=Math.pow(10,Math.floor(Math.log10(raw)));const n=raw/pow;
-  const s=n<1.5?1:n<3?2:n<7?5:10;return s*pow;}
+const VB={w:720,h:360}, M={t:18,r:74,b:34,l:66};
+function CV(v){if(typeof v==="string"&&v.startsWith("var(")){const n=v.slice(4,-1).trim();
+  return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#888888";}return v;}
+function el(tag,a){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function niceStep(r){const raw=r/5,pow=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/pow;
+  return (n<1.5?1:n<3?2:n<7?5:10)*pow;}
 
 let LAST=null;
-function draw(sims){
+function draw(series){
   const svg=$("chart"); svg.innerHTML="";
   const plotW=VB.w-M.l-M.r, plotH=VB.h-M.t-M.b;
-  let lo=0,hi=0;
-  sims.forEach(s=>s.cum.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}));
-  if(hi<=lo)hi=lo+1;
-  const pad=(hi-lo)*0.08; hi+=pad; lo-=pad;
-  const step=niceStep(hi-lo);
-  const ylo=Math.floor(lo/step)*step, yhi=Math.ceil(hi/step)*step;
-  const X=(m)=>M.l+plotW*(m/MONTHS);
-  const Y=(v)=>M.t+plotH*(1-(v-ylo)/(yhi-ylo));
-
-  // gridlines + y labels
+  let lo=0,hi=0; series.forEach(s=>s.cum.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}));
+  if(hi<=lo)hi=lo+1; const pad=(hi-lo)*0.08; hi+=pad; lo-=pad;
+  const step=niceStep(hi-lo), ylo=Math.floor(lo/step)*step, yhi=Math.ceil(hi/step)*step;
+  const X=(m)=>M.l+plotW*(m/MONTHS), Y=(v)=>M.t+plotH*(1-(v-ylo)/(yhi-ylo));
   const cGrid=CV("var(--grid)"), cBorder=CV("var(--border-strong)"), cSurface=CV("var(--surface)");
+
   for(let v=ylo;v<=yhi+1e-6;v+=step){
     const y=Y(v), zero=Math.abs(v)<1e-6;
-    svg.appendChild(el("line",{x1:M.l,y1:y,x2:M.l+plotW,y2:y,
-      stroke:zero?cBorder:cGrid,"stroke-width":zero?1.4:1}));
-    const t=el("text",{x:M.l-10,y:y+4,"text-anchor":"end","font-size":12,
-      fill:"var(--muted)","font-family":"var(--mono)"});t.textContent=fmtUSD(v);svg.appendChild(t);
+    svg.appendChild(el("line",{x1:M.l,y1:y,x2:M.l+plotW,y2:y,stroke:zero?cBorder:cGrid,"stroke-width":zero?1.4:1}));
+    const t=el("text",{x:M.l-10,y:y+4,"text-anchor":"end","font-size":12});t.textContent=fmtUSD(v);svg.appendChild(t);
   }
-  // x labels
   for(let m=0;m<=MONTHS;m+=2){
-    const t=el("text",{x:X(m),y:VB.h-12,"text-anchor":"middle","font-size":12,
-      fill:"var(--muted)","font-family":"var(--mono)"});t.textContent=m;svg.appendChild(t);
+    const t=el("text",{x:X(m),y:VB.h-12,"text-anchor":"middle","font-size":12});t.textContent=m;svg.appendChild(t);
   }
-  // lines
-  sims.forEach(s=>{
+  // avoid label pile-up at the right end
+  const ys=series.map(s=>Y(s.cum[MONTHS])); const placed=[];
+  series.forEach((s,idx)=>{
     const sc=CV(s.color);
-    let d="";
-    s.cum.forEach((v,m)=>{d+=(m===0?"M":"L")+X(m).toFixed(1)+" "+Y(v).toFixed(1)+" ";});
-    svg.appendChild(el("path",{d,fill:"none",stroke:sc,"stroke-width":2.4,
-      "stroke-linejoin":"round","stroke-linecap":"round"}));
-    // endpoint marker + direct label
-    const ex=X(MONTHS), ey=Y(s.cum[MONTHS]);
+    let d=""; s.cum.forEach((v,m)=>{d+=(m===0?"M":"L")+X(m).toFixed(1)+" "+Y(v).toFixed(1)+" ";});
+    svg.appendChild(el("path",{d,fill:"none",stroke:sc,"stroke-width":s.ad?2:2.4,
+      "stroke-dasharray":s.ad?"5 4":"","stroke-linejoin":"round","stroke-linecap":"round"}));
+    const ex=X(MONTHS); let ey=Y(s.cum[MONTHS]);
     svg.appendChild(el("circle",{cx:ex,cy:ey,r:3.5,fill:sc,stroke:cSurface,"stroke-width":2}));
-    const lab=el("text",{x:ex+8,y:ey+4,"font-size":12.5,fill:sc,"font-weight":600});
-    lab.textContent=s.key;svg.appendChild(lab);
+    let ly=ey+4; placed.forEach(p=>{if(Math.abs(ly-p)<13)ly=p+13;}); placed.push(ly);
+    const lab=el("text",{x:ex+8,y:ly,"font-size":12,fill:sc,"font-weight":600});lab.textContent=s.key;svg.appendChild(lab);
   });
 
-  // hover layer
-  const focus=el("line",{x1:0,y1:M.t,x2:0,y2:M.t+plotH,stroke:cBorder,"stroke-width":1,opacity:0});
-  svg.appendChild(focus);
-  const dots=sims.map(s=>{const c=el("circle",{r:4.5,fill:CV(s.color),stroke:cSurface,"stroke-width":2,opacity:0});svg.appendChild(c);return c;});
+  const focus=el("line",{x1:0,y1:M.t,x2:0,y2:M.t+plotH,stroke:cBorder,"stroke-width":1,opacity:0});svg.appendChild(focus);
+  const dots=series.map(s=>{const c=el("circle",{r:4.5,fill:CV(s.color),stroke:cSurface,"stroke-width":2,opacity:0});svg.appendChild(c);return c;});
   const hit=el("rect",{x:M.l,y:M.t,width:plotW,height:plotH,fill:"transparent"});svg.appendChild(hit);
-  LAST={svg,sims,X,Y,focus,dots,plotW,plotH};
+  LAST={svg,series,X,Y,focus,dots};
 }
-
 function onMove(evt){
-  if(!LAST)return;
-  const {svg,sims,X,Y,focus,dots}=LAST;
-  const pt=svg.createSVGPoint(); const src=evt.touches?evt.touches[0]:evt;
-  pt.x=src.clientX; pt.y=src.clientY;
+  if(!LAST)return; const {svg,series,X,Y,focus,dots}=LAST;
+  const pt=svg.createSVGPoint(); const src=evt.touches?evt.touches[0]:evt; pt.x=src.clientX; pt.y=src.clientY;
   const loc=pt.matrixTransform(svg.getScreenCTM().inverse());
-  let m=Math.round((loc.x-M.l)/((VB.w-M.l-M.r)/MONTHS));
-  m=Math.max(0,Math.min(MONTHS,m));
-  const xx=X(m);
-  focus.setAttribute("x1",xx);focus.setAttribute("x2",xx);focus.setAttribute("opacity",1);
-  sims.forEach((s,i)=>{dots[i].setAttribute("cx",xx);dots[i].setAttribute("cy",Y(s.cum[m]));dots[i].setAttribute("opacity",1);});
+  let m=Math.round((loc.x-M.l)/((VB.w-M.l-M.r)/MONTHS)); m=Math.max(0,Math.min(MONTHS,m));
+  const xx=X(m); focus.setAttribute("x1",xx);focus.setAttribute("x2",xx);focus.setAttribute("opacity",1);
+  series.forEach((s,i)=>{dots[i].setAttribute("cx",xx);dots[i].setAttribute("cy",Y(s.cum[m]));dots[i].setAttribute("opacity",1);});
   const tip=$("tooltip");
-  tip.innerHTML=`<div class="tt-m">Месяц ${m}</div>`+sims.map(s=>{
-    const v=s.cum[m];const col=v>=0?"var(--profit)":"var(--loss)";
+  tip.innerHTML=`<div class="tt-m">Месяц ${m}</div>`+series.map(s=>{
+    const v=s.cum[m], col=s.ad?"var(--ink)":(v>=0?"var(--profit)":"var(--loss)");
     return `<div class="tt-r"><span class="tt-l"><span class="dot" style="width:9px;height:9px;border-radius:2px;background:${s.color}"></span>${s.key}</span><span class="tt-v" style="color:${col}">${fmtUSD(v)}</span></div>`;
   }).join("");
-  const box=svg.getBoundingClientRect();
-  const relx=(xx/VB.w)*box.width;
-  tip.style.opacity=1;
-  const tw=tip.offsetWidth;
-  let left=relx+14; if(left+tw>box.width)left=relx-tw-14; if(left<0)left=4;
+  const box=svg.getBoundingClientRect(), relx=(xx/VB.w)*box.width; tip.style.opacity=1;
+  const tw=tip.offsetWidth; let left=relx+14; if(left+tw>box.width)left=relx-tw-14; if(left<0)left=4;
   tip.style.left=left+"px"; tip.style.top="8px";
 }
 function onLeave(){if(!LAST)return;LAST.focus.setAttribute("opacity",0);LAST.dots.forEach(d=>d.setAttribute("opacity",0));$("tooltip").style.opacity=0;}
 
-// ---- tiles + legend ----
-function renderTiles(sims){
+// ---- tiles / legend / note ----
+function renderTiles(progSims,adSim){
   const box=$("tiles");box.innerHTML="";
-  sims.forEach(s=>{
+  progSims.forEach(s=>{
     const pos=s.net>=0;
     const div=document.createElement("div");div.className="tile";div.style.setProperty("--tc",s.color);
     div.innerHTML=`<div class="tname"><span class="dot" style="background:${s.color}"></span>${s.key}</div>
       <div class="big" style="color:${pos?'var(--profit)':'var(--loss)'}">${fmtUSD(s.net)}</div>
-      <div class="badge ${pos?'p':'l'}">${pos?'выход в плюс: мес '+s.be : (s.be?'плюс: мес '+s.be:'в минусе за год')}</div>
+      <div class="badge ${pos?'p':'l'}">${pos?'плюс: мес '+s.be:(s.be?'плюс: мес '+s.be:'в минусе за год')}</div>
       <div class="sub"><span>Комиссий за год</span><b>${fmtUSD(s.totalComm)}</b></div>
       <div class="sub"><span>Продаж за год</span><b>${fmtInt(s.totalSales)}</b></div>`;
     box.appendChild(div);
   });
+  if(adSim){
+    const div=document.createElement("div");div.className="tile";div.style.setProperty("--tc",adSim.color);
+    div.innerHTML=`<div class="tname"><span class="dot" style="background:${adSim.color}"></span>Реклама (YouTube+блог)</div>
+      <div class="big" style="color:var(--ink)">${fmtUSD(adSim.net)}</div>
+      <div class="badge n">за год · стекается сверху</div>
+      <div class="sub"><span>Доход с показов</span><b>${fmtUSD(adSim.total)}</b></div>
+      <div class="sub"><span>Без расходов сверх</span><b>—</b></div>`;
+    box.appendChild(div);
+  }
 }
-function renderLegend(sims){
-  $("legend").innerHTML=sims.map(s=>`<span><span class="dot" style="width:11px;height:11px;background:${s.color}"></span>${s.key}</span>`).join("");
+function renderLegend(series){
+  $("legend").innerHTML=series.map(s=>s.ad
+    ?`<span><span class="dash"></span>${s.key}</span>`
+    :`<span><span class="dot" style="width:11px;height:11px;background:${s.color}"></span>${s.key}</span>`).join("");
 }
-function renderNote(sims){
-  const best=sims.slice().sort((a,b)=>b.net-a.net)[0];
-  $("chartnote").innerHTML=`При текущих допущениях лучший результат за год — <b>${best.key}</b> (${fmtUSD(best.net)} чистыми). `+
-   `Линия ниже нуля — вложения ещё не окупились; точка пересечения нуля — выход в плюс. `+
-   `Считается по каждой программе отдельно: чтобы вести все три параллельно, нужно втрое больше контента и расходов.`;
+function renderNote(progSims,adSim){
+  const shown=progSims.slice();
+  if(!shown.length && !adSim){$("chartnote").textContent="Включи хотя бы одну программу или слой рекламы, чтобы увидеть график.";return;}
+  let html="";
+  if(shown.length){
+    const best=shown.slice().sort((a,b)=>b.net-a.net)[0];
+    html+=`Лучшая по чистой прибыли за год — <b>${best.key}</b> (${fmtUSD(best.net)}). Линия ниже нуля = вложения не окупились; пересечение нуля = выход в плюс. `;
+  }
+  if(adSim) html+=`Пунктир «Реклама» стартует с нуля (нет вложений) и стекается поверх партнёрских доходов. `;
+  html+=`Каждая программа считается отдельно: вести все параллельно = кратно больше контента и расходов.`;
+  $("chartnote").innerHTML=html;
 }
 
 // ---- main ----
@@ -379,25 +404,25 @@ function update(){
   $("growth-v").textContent=(g.growth*100).toFixed(0)+"%/мес";
   $("ctr-v").textContent=(g.ctr*100).toFixed(1)+"%";
   $("cvr-v").textContent=(g.cvr*100).toFixed(2)+"%";
-  const sims=progs.map(p=>({key:p.key,color:p.color,...simulate(g,p)}));
-  renderTiles(sims);renderLegend(sims);draw(sims);renderNote(sims);
+  $("rpm-v").textContent="$"+g.rpm.toFixed(1);
+  const progSims=progs.filter(p=>show[p.key]).map(p=>({key:p.key,color:p.color,...simulate(g,p)}));
+  const adSim=g.adOn?simulateAd(g):null;
+  const series=progSims.concat(adSim?[adSim]:[]);
+  renderTiles(progSims,adSim); renderLegend(series); renderNote(progSims,adSim);
+  if(series.length) draw(series); else {$("chart").innerHTML="";LAST=null;}
 }
-document.getElementById("controls").addEventListener("input",update);
+$("controls").addEventListener("input",update);
 const chart=$("chart");
-chart.addEventListener("mousemove",onMove);
-chart.addEventListener("mouseleave",onLeave);
-chart.addEventListener("touchstart",onMove,{passive:true});
-chart.addEventListener("touchmove",onMove,{passive:true});
-chart.addEventListener("touchend",onLeave);
-window.addEventListener("resize",()=>{/* svg is viewBox-scaled; tooltip recalcs on next move */});
+chart.addEventListener("mousemove",onMove); chart.addEventListener("mouseleave",onLeave);
+chart.addEventListener("touchstart",onMove,{passive:true}); chart.addEventListener("touchmove",onMove,{passive:true}); chart.addEventListener("touchend",onLeave);
 
-// theme toggle (per-viewer convenience)
+// theme toggle
 const tb=$("themebtn");
 try{const saved=localStorage.getItem("aff-theme");if(saved)document.documentElement.setAttribute("data-theme",saved);}catch(e){}
 tb.addEventListener("click",()=>{
   const cur=document.documentElement.getAttribute("data-theme");
   const mqDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
-  const next=cur? (cur==="dark"?"light":"dark") : (mqDark?"light":"dark");
+  const next=cur?(cur==="dark"?"light":"dark"):(mqDark?"light":"dark");
   document.documentElement.setAttribute("data-theme",next);
   try{localStorage.setItem("aff-theme",next);}catch(e){}
   update();
