@@ -1,0 +1,407 @@
+<title>Партнёрский калькулятор</title>
+<style>
+  :root{
+    --bg:#fcfcfb; --surface:#ffffff; --surface-2:#f6f5f2;
+    --ink:#1e2329; --muted:#5c6570; --faint:#8b939c;
+    --border:#e6e3dd; --border-strong:#d4d0c8;
+    --accent:#1f9e8f; --accent-ink:#0f5d54;
+    --amber:#c9781f;
+    --profit:#227a52; --profit-bg:#e7f3ec;
+    --loss:#b23b3b; --loss-bg:#f6e9e7;
+    --s1:#e8833a; --s2:#1f9e8f; --s3:#3b6fe0; /* Semrush / HubSpot / NordVPN */
+    --grid:#ece9e3;
+    --shadow:0 1px 2px rgba(30,35,41,.04),0 4px 16px rgba(30,35,41,.06);
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --serif:"Fraunces","Iowan Old Style",Georgia,serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#131619; --surface:#1a1e22; --surface-2:#20252a;
+      --ink:#e8e6e1; --muted:#9aa3ad; --faint:#727b85;
+      --border:#2a3036; --border-strong:#373e45;
+      --accent:#3dbbaa; --accent-ink:#8fe0d4;
+      --amber:#e2a15a;
+      --profit:#4fc186; --profit-bg:#16281f;
+      --loss:#e07a70; --loss-bg:#2a1a19;
+      --s1:#e58a3c; --s2:#3dbbaa; --s3:#6d9bf0;
+      --grid:#262c32;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#131619; --surface:#1a1e22; --surface-2:#20252a;
+    --ink:#e8e6e1; --muted:#9aa3ad; --faint:#727b85;
+    --border:#2a3036; --border-strong:#373e45;
+    --accent:#3dbbaa; --accent-ink:#8fe0d4;
+    --amber:#e2a15a;
+    --profit:#4fc186; --profit-bg:#16281f;
+    --loss:#e07a70; --loss-bg:#2a1a19;
+    --s1:#e58a3c; --s2:#3dbbaa; --s3:#6d9bf0;
+    --grid:#262c32;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+    padding-inline:16px;padding-block:0;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px}
+  h1,h2,h3{margin:0;text-wrap:balance}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+  header h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,5vw,42px);line-height:1.05;margin-top:8px;letter-spacing:-.01em}
+  header p.lede{color:var(--muted);max-width:62ch;margin-top:12px;font-size:15px}
+  .disclaimer{margin-top:18px;border:1px solid var(--border);border-left:3px solid var(--amber);
+    background:var(--surface-2);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--muted);max-width:80ch}
+  .disclaimer b{color:var(--ink)}
+  .grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;margin-top:26px;align-items:start}
+  @media (max-width:820px){.grid{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .panel h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:14px}
+  .control{margin-bottom:16px}
+  .control:last-child{margin-bottom:0}
+  .control .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+  .control label{font-size:14px;font-weight:500}
+  .control .val{font-family:var(--mono);font-size:14px;color:var(--accent-ink);font-weight:600;font-variant-numeric:tabular-nums}
+  .control .hint{font-size:12px;color:var(--faint);margin-top:5px}
+  input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:pointer}
+  .divider{height:1px;background:var(--border);margin:18px -18px}
+  table.assump{width:100%;border-collapse:collapse;font-size:13px}
+  table.assump th{text-align:right;font-weight:600;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:6px 4px;border-bottom:1px solid var(--border)}
+  table.assump th:first-child{text-align:left}
+  table.assump td{padding:5px 4px;border-bottom:1px solid var(--border)}
+  table.assump td:first-child{text-align:left}
+  .prog-name{display:flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap}
+  .dot{width:10px;height:10px;border-radius:3px;flex:none}
+  table.assump input{width:64px;font-family:var(--mono);font-size:13px;text-align:right;padding:4px 6px;
+    border:1px solid var(--border-strong);border-radius:6px;background:var(--surface-2);color:var(--ink);font-variant-numeric:tabular-nums}
+  table.assump input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .results{display:flex;flex-direction:column;gap:22px;min-width:0}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:560px){.tiles{grid-template-columns:1fr}}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px;box-shadow:var(--shadow);border-top:3px solid var(--tc,var(--accent))}
+  .tile .tname{display:flex;align-items:center;gap:7px;font-weight:600;font-size:14px}
+  .tile .big{font-family:var(--mono);font-weight:600;font-size:26px;letter-spacing:-.02em;margin-top:10px;font-variant-numeric:tabular-nums;line-height:1}
+  .tile .sub{font-size:12.5px;color:var(--muted);margin-top:8px;display:flex;justify-content:space-between;gap:6px}
+  .tile .sub b{color:var(--ink);font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:10px}
+  .badge.p{background:var(--profit-bg);color:var(--profit)}
+  .badge.l{background:var(--loss-bg);color:var(--loss)}
+  .chartcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .chartcard .chead{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+  .chartcard h3{font-family:var(--serif);font-weight:600;font-size:19px}
+  .chartcard .csub{font-size:12.5px;color:var(--muted)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 2px;font-size:13px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+  .legend .dot{border-radius:2px}
+  .chartbox{position:relative;width:100%}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  #chart text{font-family:var(--mono);fill:var(--muted)}
+  .tooltip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--border-strong);
+    border-radius:9px;padding:9px 11px;font-size:12.5px;box-shadow:var(--shadow);opacity:0;transition:opacity .1s;min-width:150px;z-index:5}
+  .tooltip .tt-m{font-weight:600;margin-bottom:6px;font-size:12px;color:var(--faint)}
+  .tooltip .tt-r{display:flex;align-items:center;gap:7px;justify-content:space-between;margin-top:3px}
+  .tooltip .tt-l{display:inline-flex;align-items:center;gap:6px}
+  .tooltip .tt-v{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+  .note{font-size:12.5px;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+  .flow{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+  .flow h3{font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:14px}
+  .flow ol{margin:0;padding-left:0;list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:12px}
+  .flow li{display:flex;gap:12px;align-items:flex-start;counter-increment:step}
+  .flow li::before{content:counter(step);flex:none;width:26px;height:26px;border-radius:8px;background:var(--surface-2);
+    border:1px solid var(--border);color:var(--accent-ink);font-family:var(--mono);font-weight:600;font-size:13px;
+    display:grid;place-items:center;margin-top:1px}
+  .flow li b{font-weight:600}
+  .flow li span{font-size:14px;color:var(--muted)}
+  .flow li span b{color:var(--ink)}
+  footer{margin-top:30px;font-size:12px;color:var(--faint);text-align:center}
+  .themebtn{position:fixed;top:12px;right:12px;z-index:10;background:var(--surface);border:1px solid var(--border);
+    color:var(--muted);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--sans)}
+</style>
+
+<button class="themebtn" id="themebtn" type="button" aria-label="Сменить тему">◐ тема</button>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Партнёрский маркетинг · US / Global</div>
+    <h1>Сколько и на чём можно заработать</h1>
+    <p class="lede">Прикидка дохода по трём отобранным программам — Semrush, HubSpot и NordVPN. Крути ползунки трафика и конверсии слева и смотри, когда каждая программа выходит в плюс. Цифры под каждую программу можно править в таблице.</p>
+    <div class="disclaimer">
+      <b>Это модель, а не обещание.</b> Клиент платит <b>сервису</b> за продукт (SEO-инструмент, CRM, VPN), а сервис платит тебе комиссию — ты денег с клиента не берёшь. Ставки взяты из вторичных источников и требуют подтверждения в личном кабинете. Реальные конверсии узнаешь только по факту — вноси их в <b>revenue.csv</b>.
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- CONTROLS -->
+    <form class="panel" id="controls" autocomplete="off">
+      <h2>Трафик и воронка</h2>
+      <div class="control">
+        <div class="row"><label for="visitors">Посетителей в месяц (на 1 программу)</label><span class="val" id="visitors-v"></span></div>
+        <input type="range" id="visitors" min="200" max="20000" step="100" value="3000">
+        <div class="hint">Сколько людей видят твой контент по этой теме за месяц (стартовый уровень).</div>
+      </div>
+      <div class="control">
+        <div class="row"><label for="growth">Рост трафика в месяц</label><span class="val" id="growth-v"></span></div>
+        <input type="range" id="growth" min="0" max="30" step="1" value="12">
+        <div class="hint">SEO раскачивается со временем — статьи набирают позиции. 10–15% в месяц реалистично на старте.</div>
+      </div>
+      <div class="control">
+        <div class="row"><label for="ctr">Кликают по партнёрской ссылке</label><span class="val" id="ctr-v"></span></div>
+        <input type="range" id="ctr" min="1" max="15" step="0.5" value="4">
+        <div class="hint">Доля читателей, которые перешли по твоей ссылке на сайт сервиса.</div>
+      </div>
+      <div class="control">
+        <div class="row"><label for="cvr">Покупают из кликнувших</label><span class="val" id="cvr-v"></span></div>
+        <input type="range" id="cvr" min="0.5" max="8" step="0.25" value="2.5">
+        <div class="hint">Доля перешедших, кто оформил платную подписку. Для B2B/SaaS 1–3% — типично.</div>
+      </div>
+
+      <div class="divider"></div>
+      <h2>Экономика программ <span style="text-transform:none;letter-spacing:0;font-weight:400">(правь под факт)</span></h2>
+      <div style="overflow-x:auto">
+      <table class="assump" id="assump">
+        <thead><tr>
+          <th>Программа</th><th title="Разовая комиссия за продажу">Разово&nbsp;$</th>
+          <th title="Повторяющаяся комиссия в месяц с одного клиента">Рекур.&nbsp;$/м</th>
+          <th title="Сколько месяцев платят рекуррентную комиссию">Мес.</th>
+          <th title="Разовые расходы на старт">Старт&nbsp;$</th>
+          <th title="Ежемесячные расходы">Расх.&nbsp;$/м</th>
+        </tr></thead>
+        <tbody><!-- filled by JS --></tbody>
+      </table>
+      </div>
+      <div class="hint" style="margin-top:10px">Semrush — фикс $200 за продажу (разовый доход). HubSpot — 30% в месяц до 12 мес (рекуррентный, ~$15/мес с клиента). NordVPN — ~$24 с первой продажи (гибрид, продления в основном за горизонтом года).</div>
+    </form>
+
+    <!-- RESULTS -->
+    <div class="results">
+      <div class="tiles" id="tiles"></div>
+
+      <div class="chartcard">
+        <div class="chead">
+          <div><h3>Накопленная чистая прибыль</h3><div class="csub">Комиссии минус расходы, нарастающим итогом за 12 месяцев</div></div>
+        </div>
+        <div class="legend" id="legend"></div>
+        <div class="chartbox">
+          <svg id="chart" viewBox="0 0 720 360" role="img" aria-label="График накопленной чистой прибыли по трём программам за 12 месяцев"></svg>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+        <div class="note" id="chartnote"></div>
+      </div>
+
+      <div class="flow">
+        <h3>Откуда берётся доход</h3>
+        <ol>
+          <li><span><b>Ты делаешь контент</b> — обзор, сравнение, видео — с твоей партнёрской ссылкой (в ней зашит твой ID).</span></li>
+          <li><span><b>Человек кликает</b> и переходит на сайт сервиса. Cookie/subID запоминает, что он пришёл от тебя.</span></li>
+          <li><span><b>Человек покупает подписку</b> — платит сервису за реальную пользу (инструмент, CRM, VPN), не тебе.</span></li>
+          <li><span><b>Сервис платит тебе комиссию</b> из своей выручки — разово или каждый месяц, пока клиент платит. Вывод на PayPal/банк после холда 30–60 дней.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <footer>Модель для оценки. Не финансовая гарантия. Фактическую прибыль показывает только revenue.csv по реальным выплатам.</footer>
+</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+
+<script>
+"use strict";
+const PROGRAMS=[
+  {key:"Semrush", color:"var(--s1)", oneTime:200, recur:0,  months:0,  upfront:600, monthly:20},
+  {key:"HubSpot", color:"var(--s2)", oneTime:0,   recur:15, months:12, upfront:550, monthly:30},
+  {key:"NordVPN", color:"var(--s3)", oneTime:24,  recur:0,  months:0,  upfront:450, monthly:15},
+];
+const MONTHS=12;
+const $=(id)=>document.getElementById(id);
+const fmtUSD=(n)=>{const s=n<0?"-":"";n=Math.abs(Math.round(n));return s+"$"+n.toLocaleString("en-US");};
+const fmtInt=(n)=>Math.round(n).toLocaleString("ru-RU");
+
+// ---- build assumptions table ----
+const tbody=document.querySelector("#assump tbody");
+PROGRAMS.forEach((p,i)=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td><span class="prog-name"><span class="dot" style="background:${p.color}"></span>${p.key}</span></td>`+
+    ["oneTime","recur","months","upfront","monthly"].map(f=>
+      `<td><input type="number" min="0" step="1" data-i="${i}" data-f="${f}" value="${p[f]}" aria-label="${p.key} ${f}"></td>`).join("");
+  tbody.appendChild(tr);
+});
+
+function readInputs(){
+  const g={
+    visitors:+$("visitors").value, growth:+$("growth").value/100,
+    ctr:+$("ctr").value/100, cvr:+$("cvr").value/100
+  };
+  const progs=PROGRAMS.map(p=>({...p}));
+  document.querySelectorAll("#assump input").forEach(inp=>{
+    const v=Math.max(0,+inp.value||0); progs[+inp.dataset.i][inp.dataset.f]=v;
+  });
+  return {g,progs};
+}
+
+// ---- model ----
+function simulate(g,p){
+  const sales=[]; // sales per month 1..12
+  for(let m=1;m<=MONTHS;m++){
+    const vis=g.visitors*Math.pow(1+g.growth,m-1);
+    sales.push(vis*g.ctr*g.cvr);
+  }
+  const cum=[-p.upfront]; // month 0 = only upfront spent
+  let totalComm=0;
+  for(let m=1;m<=MONTHS;m++){
+    let comm=sales[m-1]*p.oneTime;               // one-time on this month's sales
+    if(p.recur>0 && p.months>0){                 // recurring from all live cohorts
+      for(let k=1;k<=m;k++){ if(m-k < p.months) comm+=sales[k-1]*p.recur; }
+    }
+    totalComm+=comm;
+    cum.push(cum[m-1]+comm-p.monthly);
+  }
+  let be=null;
+  for(let m=1;m<=MONTHS;m++){ if(cum[m]>=0){be=m;break;} }
+  const totalSales=sales.reduce((a,b)=>a+b,0);
+  return {cum,totalComm,totalSales,net:cum[MONTHS],be};
+}
+
+// ---- chart ----
+const NS="http://www.w3.org/2000/svg";
+const VB={w:720,h:360}, M={t:18,r:70,b:34,l:64};
+function CV(v){ // resolve "var(--x)" to a concrete color (SVG attributes don't parse var())
+  if(typeof v==="string" && v.startsWith("var(")){
+    const name=v.slice(4,-1).trim();
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim()||"#888888";
+  }
+  return v;
+}
+function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+function niceStep(range){const raw=range/5;const pow=Math.pow(10,Math.floor(Math.log10(raw)));const n=raw/pow;
+  const s=n<1.5?1:n<3?2:n<7?5:10;return s*pow;}
+
+let LAST=null;
+function draw(sims){
+  const svg=$("chart"); svg.innerHTML="";
+  const plotW=VB.w-M.l-M.r, plotH=VB.h-M.t-M.b;
+  let lo=0,hi=0;
+  sims.forEach(s=>s.cum.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}));
+  if(hi<=lo)hi=lo+1;
+  const pad=(hi-lo)*0.08; hi+=pad; lo-=pad;
+  const step=niceStep(hi-lo);
+  const ylo=Math.floor(lo/step)*step, yhi=Math.ceil(hi/step)*step;
+  const X=(m)=>M.l+plotW*(m/MONTHS);
+  const Y=(v)=>M.t+plotH*(1-(v-ylo)/(yhi-ylo));
+
+  // gridlines + y labels
+  const cGrid=CV("var(--grid)"), cBorder=CV("var(--border-strong)"), cSurface=CV("var(--surface)");
+  for(let v=ylo;v<=yhi+1e-6;v+=step){
+    const y=Y(v), zero=Math.abs(v)<1e-6;
+    svg.appendChild(el("line",{x1:M.l,y1:y,x2:M.l+plotW,y2:y,
+      stroke:zero?cBorder:cGrid,"stroke-width":zero?1.4:1}));
+    const t=el("text",{x:M.l-10,y:y+4,"text-anchor":"end","font-size":12,
+      fill:"var(--muted)","font-family":"var(--mono)"});t.textContent=fmtUSD(v);svg.appendChild(t);
+  }
+  // x labels
+  for(let m=0;m<=MONTHS;m+=2){
+    const t=el("text",{x:X(m),y:VB.h-12,"text-anchor":"middle","font-size":12,
+      fill:"var(--muted)","font-family":"var(--mono)"});t.textContent=m;svg.appendChild(t);
+  }
+  // lines
+  sims.forEach(s=>{
+    const sc=CV(s.color);
+    let d="";
+    s.cum.forEach((v,m)=>{d+=(m===0?"M":"L")+X(m).toFixed(1)+" "+Y(v).toFixed(1)+" ";});
+    svg.appendChild(el("path",{d,fill:"none",stroke:sc,"stroke-width":2.4,
+      "stroke-linejoin":"round","stroke-linecap":"round"}));
+    // endpoint marker + direct label
+    const ex=X(MONTHS), ey=Y(s.cum[MONTHS]);
+    svg.appendChild(el("circle",{cx:ex,cy:ey,r:3.5,fill:sc,stroke:cSurface,"stroke-width":2}));
+    const lab=el("text",{x:ex+8,y:ey+4,"font-size":12.5,fill:sc,"font-weight":600});
+    lab.textContent=s.key;svg.appendChild(lab);
+  });
+
+  // hover layer
+  const focus=el("line",{x1:0,y1:M.t,x2:0,y2:M.t+plotH,stroke:cBorder,"stroke-width":1,opacity:0});
+  svg.appendChild(focus);
+  const dots=sims.map(s=>{const c=el("circle",{r:4.5,fill:CV(s.color),stroke:cSurface,"stroke-width":2,opacity:0});svg.appendChild(c);return c;});
+  const hit=el("rect",{x:M.l,y:M.t,width:plotW,height:plotH,fill:"transparent"});svg.appendChild(hit);
+  LAST={svg,sims,X,Y,focus,dots,plotW,plotH};
+}
+
+function onMove(evt){
+  if(!LAST)return;
+  const {svg,sims,X,Y,focus,dots}=LAST;
+  const pt=svg.createSVGPoint(); const src=evt.touches?evt.touches[0]:evt;
+  pt.x=src.clientX; pt.y=src.clientY;
+  const loc=pt.matrixTransform(svg.getScreenCTM().inverse());
+  let m=Math.round((loc.x-M.l)/((VB.w-M.l-M.r)/MONTHS));
+  m=Math.max(0,Math.min(MONTHS,m));
+  const xx=X(m);
+  focus.setAttribute("x1",xx);focus.setAttribute("x2",xx);focus.setAttribute("opacity",1);
+  sims.forEach((s,i)=>{dots[i].setAttribute("cx",xx);dots[i].setAttribute("cy",Y(s.cum[m]));dots[i].setAttribute("opacity",1);});
+  const tip=$("tooltip");
+  tip.innerHTML=`<div class="tt-m">Месяц ${m}</div>`+sims.map(s=>{
+    const v=s.cum[m];const col=v>=0?"var(--profit)":"var(--loss)";
+    return `<div class="tt-r"><span class="tt-l"><span class="dot" style="width:9px;height:9px;border-radius:2px;background:${s.color}"></span>${s.key}</span><span class="tt-v" style="color:${col}">${fmtUSD(v)}</span></div>`;
+  }).join("");
+  const box=svg.getBoundingClientRect();
+  const relx=(xx/VB.w)*box.width;
+  tip.style.opacity=1;
+  const tw=tip.offsetWidth;
+  let left=relx+14; if(left+tw>box.width)left=relx-tw-14; if(left<0)left=4;
+  tip.style.left=left+"px"; tip.style.top="8px";
+}
+function onLeave(){if(!LAST)return;LAST.focus.setAttribute("opacity",0);LAST.dots.forEach(d=>d.setAttribute("opacity",0));$("tooltip").style.opacity=0;}
+
+// ---- tiles + legend ----
+function renderTiles(sims){
+  const box=$("tiles");box.innerHTML="";
+  sims.forEach(s=>{
+    const pos=s.net>=0;
+    const div=document.createElement("div");div.className="tile";div.style.setProperty("--tc",s.color);
+    div.innerHTML=`<div class="tname"><span class="dot" style="background:${s.color}"></span>${s.key}</div>
+      <div class="big" style="color:${pos?'var(--profit)':'var(--loss)'}">${fmtUSD(s.net)}</div>
+      <div class="badge ${pos?'p':'l'}">${pos?'выход в плюс: мес '+s.be : (s.be?'плюс: мес '+s.be:'в минусе за год')}</div>
+      <div class="sub"><span>Комиссий за год</span><b>${fmtUSD(s.totalComm)}</b></div>
+      <div class="sub"><span>Продаж за год</span><b>${fmtInt(s.totalSales)}</b></div>`;
+    box.appendChild(div);
+  });
+}
+function renderLegend(sims){
+  $("legend").innerHTML=sims.map(s=>`<span><span class="dot" style="width:11px;height:11px;background:${s.color}"></span>${s.key}</span>`).join("");
+}
+function renderNote(sims){
+  const best=sims.slice().sort((a,b)=>b.net-a.net)[0];
+  $("chartnote").innerHTML=`При текущих допущениях лучший результат за год — <b>${best.key}</b> (${fmtUSD(best.net)} чистыми). `+
+   `Линия ниже нуля — вложения ещё не окупились; точка пересечения нуля — выход в плюс. `+
+   `Считается по каждой программе отдельно: чтобы вести все три параллельно, нужно втрое больше контента и расходов.`;
+}
+
+// ---- main ----
+function update(){
+  const {g,progs}=readInputs();
+  $("visitors-v").textContent=fmtInt(g.visitors);
+  $("growth-v").textContent=(g.growth*100).toFixed(0)+"%/мес";
+  $("ctr-v").textContent=(g.ctr*100).toFixed(1)+"%";
+  $("cvr-v").textContent=(g.cvr*100).toFixed(2)+"%";
+  const sims=progs.map(p=>({key:p.key,color:p.color,...simulate(g,p)}));
+  renderTiles(sims);renderLegend(sims);draw(sims);renderNote(sims);
+}
+document.getElementById("controls").addEventListener("input",update);
+const chart=$("chart");
+chart.addEventListener("mousemove",onMove);
+chart.addEventListener("mouseleave",onLeave);
+chart.addEventListener("touchstart",onMove,{passive:true});
+chart.addEventListener("touchmove",onMove,{passive:true});
+chart.addEventListener("touchend",onLeave);
+window.addEventListener("resize",()=>{/* svg is viewBox-scaled; tooltip recalcs on next move */});
+
+// theme toggle (per-viewer convenience)
+const tb=$("themebtn");
+try{const saved=localStorage.getItem("aff-theme");if(saved)document.documentElement.setAttribute("data-theme",saved);}catch(e){}
+tb.addEventListener("click",()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const mqDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
+  const next=cur? (cur==="dark"?"light":"dark") : (mqDark?"light":"dark");
+  document.documentElement.setAttribute("data-theme",next);
+  try{localStorage.setItem("aff-theme",next);}catch(e){}
+  update();
+});
+
+update();
+</script>
