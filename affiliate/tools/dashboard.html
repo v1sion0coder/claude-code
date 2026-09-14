@@ -1,0 +1,241 @@
+<title>Реестр партнёрок</title>
+<style>
+  :root{
+    --bg:#fcfcfb; --surface:#ffffff; --surface-2:#f6f5f2;
+    --ink:#1e2329; --muted:#5c6570; --faint:#8b939c;
+    --border:#e6e3dd; --border-strong:#d4d0c8;
+    --accent:#1f9e8f; --accent-ink:#0f5d54;
+    --ok:#227a52; --ok-bg:#e7f3ec;
+    --warn:#b0771a; --warn-bg:#f7efdf;
+    --info:#3b6fa8; --info-bg:#e8eef6;
+    --bad:#b23b3b; --bad-bg:#f6e9e7;
+    --track:#eceae4;
+    --shadow:0 1px 2px rgba(30,35,41,.04),0 4px 16px rgba(30,35,41,.06);
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --serif:"Fraunces","Iowan Old Style",Georgia,serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#131619; --surface:#1a1e22; --surface-2:#20252a;
+    --ink:#e8e6e1; --muted:#9aa3ad; --faint:#727b85;
+    --border:#2a3036; --border-strong:#373e45;
+    --accent:#3dbbaa; --accent-ink:#8fe0d4;
+    --ok:#4fc186; --ok-bg:#16281f;
+    --warn:#e0a94e; --warn-bg:#2c2413;
+    --info:#6fa5df; --info-bg:#152230;
+    --bad:#e07a70; --bad-bg:#2a1a19;
+    --track:#262c32;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#131619; --surface:#1a1e22; --surface-2:#20252a;
+    --ink:#e8e6e1; --muted:#9aa3ad; --faint:#727b85;
+    --border:#2a3036; --border-strong:#373e45;
+    --accent:#3dbbaa; --accent-ink:#8fe0d4;
+    --ok:#4fc186; --ok-bg:#16281f;
+    --warn:#e0a94e; --warn-bg:#2c2413;
+    --info:#6fa5df; --info-bg:#152230;
+    --bad:#e07a70; --bad-bg:#2a1a19;
+    --track:#262c32;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;padding-inline:16px;padding-block:0}
+  .wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px}
+  h1{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(26px,4.6vw,38px);letter-spacing:-.01em;line-height:1.05}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+  header p{color:var(--muted);max-width:70ch;margin-top:10px;font-size:14.5px}
+  header a{color:var(--accent-ink);font-weight:600}
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
+  @media (max-width:720px){.tiles{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:440px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);border-top:3px solid var(--tc,var(--accent))}
+  .tile .k{font-size:12px;color:var(--muted);font-weight:500}
+  .tile .v{font-family:var(--mono);font-weight:600;font-size:27px;margin-top:6px;line-height:1;font-variant-numeric:tabular-nums}
+  .controls{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+  .filtrow{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+  .flabel{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:600;margin-right:4px;width:64px;flex:none}
+  .chip{font-size:12.5px;padding:5px 11px;border:1px solid var(--border-strong);border-radius:20px;background:var(--surface);
+    color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap}
+  .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  :root[data-theme="dark"] .chip[aria-pressed="true"],
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#0c1512}}
+  input#q{flex:1;min-width:160px;font-family:var(--sans);font-size:14px;padding:8px 12px;border:1px solid var(--border-strong);
+    border-radius:9px;background:var(--surface);color:var(--ink)}
+  input#q:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .tablecard{margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .tablescroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+  thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:600;
+    padding:12px 14px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface-2)}
+  thead th.sortable{cursor:pointer}
+  thead th.num{text-align:right}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  .pname{font-weight:600;font-size:14px}
+  .pnote{font-size:12px;color:var(--muted);margin-top:2px;max-width:44ch}
+  .niche{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .type{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+  .scorewrap{display:flex;align-items:center;gap:9px;justify-content:flex-end}
+  .scoreval{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;width:24px;text-align:right}
+  .bar{width:74px;height:7px;border-radius:4px;background:var(--track);overflow:hidden;flex:none}
+  .bar i{display:block;height:100%;border-radius:4px}
+  .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .badge.ok{background:var(--ok-bg);color:var(--ok)} .badge.warn{background:var(--warn-bg);color:var(--warn)}
+  .badge.info{background:var(--info-bg);color:var(--info)} .badge.bad{background:var(--bad-bg);color:var(--bad)}
+  .empty{padding:32px;text-align:center;color:var(--muted);font-size:14px}
+  .foot{margin-top:16px;font-size:12px;color:var(--faint)}
+  .foot b{color:var(--muted)}
+  footer{margin-top:26px;font-size:12px;color:var(--faint);text-align:center}
+  .themebtn{position:fixed;top:12px;right:12px;z-index:10;background:var(--surface);border:1px solid var(--border);
+    color:var(--muted);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--sans)}
+</style>
+
+<button class="themebtn" id="themebtn" type="button">◐ тема</button>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Партнёрский маркетинг · US / Global</div>
+    <h1>Реестр партнёрских программ</h1>
+    <p>42 программы, проверенные критически по 7 нишам: балл достоверности (0–100), тип выплат и решение отбора. Фильтруй по нише и статусу. Экономику лидеров считай в <a href="https://claude.ai/code/artifact/e8841462-e8c5-4554-a7ff-c364ea96d21f">калькуляторе дохода</a>.</p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="controls">
+    <div class="filtrow"><span class="flabel">Ниша</span><span id="nicheChips"></span></div>
+    <div class="filtrow"><span class="flabel">Решение</span><span id="decChips"></span></div>
+    <div class="filtrow"><input type="text" id="q" placeholder="Поиск по названию…" aria-label="Поиск по названию"></div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablescroll">
+      <table>
+        <thead><tr>
+          <th class="sortable" data-sort="name">Программа</th>
+          <th>Ниша</th>
+          <th>Модель</th>
+          <th class="sortable num" data-sort="score">Балл ▾</th>
+          <th>Решение</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="empty" hidden>Ничего не найдено по фильтрам.</div>
+  </div>
+
+  <div class="foot" id="foot"></div>
+  <footer>Балл = оценка достоверности/шанса, не факт дохода. Факт прибыли даёт только revenue.csv по выплаченным суммам.</footer>
+</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+
+<script>
+"use strict";
+// type: rec=recurring, one=разовый, hyb=гибрид ; dec: ok/warn/info/bad
+const T={rec:"Recurring",one:"Разовый",hyb:"Гибрид"};
+const DEC={ok:"подтверждена",warn:"тестировать",info:"в резерв",bad:"отклонена"};
+const DATA=[
+ {n:"Semrush",g:"SaaS",t:"one",s:80,d:"ok",note:"$200 flat за продажу, высокоинтентная B2B-аудитория"},
+ {n:"HubSpot",g:"SaaS",t:"rec",s:79,d:"ok",note:"30% recurring до 12 мес, высокий LTV"},
+ {n:"Coursera",g:"Образование",t:"one",s:82,d:"ok",note:"15–45%, бренд+объём; для аппрува нужен трафик 1000+/мес"},
+ {n:"Thinkific",g:"Образование",t:"rec",s:80,d:"ok",note:"30% пожизненно, cookie 90 дн, $25 мин"},
+ {n:"Webflow",g:"No-code",t:"rec",s:80,d:"ok",note:"50% recurring 12 мес +10% продление; прозрачная"},
+ {n:"Shopify",g:"No-code",t:"one",s:78,d:"ok",note:"100% с 2 первых платежей (~$150); строгий аппрув"},
+ {n:"NordVPN",g:"VPN",t:"hyb",s:78,d:"ok",note:"топ-бренд, ~30% на продлениях; ставки не подтв. офиц."},
+ {n:"Kinsta",g:"Хостинг",t:"hyb",s:76,d:"warn",note:"$50–500 +10% пожизненно; апрув-холд 60 дн"},
+ {n:"Teachable",g:"Образование",t:"rec",s:76,d:"warn",note:"30% recurring 12 мес; PartnerStack платит в срок"},
+ {n:"Squarespace",g:"No-code",t:"one",s:76,d:"warn",note:"$100–200 flat за план; cookie 45 дн"},
+ {n:"Canva",g:"Дизайн",t:"hyb",s:76,d:"warn",note:"кап $36/год, но лёгкие конверсии и бренд"},
+ {n:"Hostinger",g:"Хостинг",t:"one",s:74,d:"warn",note:"40–60% CPS; нужно 3 конверсии для выплаты"},
+ {n:"ExpressVPN",g:"VPN",t:"one",s:74,d:"info",note:"flat CPA без recurring — LTV ниже Nord"},
+ {n:"MasterClass",g:"Образование",t:"one",s:74,d:"warn",note:"~25%, через ShareASale (20+ лет надёжных выплат)"},
+ {n:"Wayfair",g:"E-commerce",t:"one",s:74,d:"warn",note:"5–7%, AOV ~$300 → ~$15–21/продажа; cookie 7 дн"},
+ {n:"Framer",g:"No-code",t:"rec",s:74,d:"warn",note:"50% первый год; вступление через статус Expert"},
+ {n:"Adobe",g:"Дизайн",t:"one",s:74,d:"warn",note:"85% помесячно vs 8.33% годовая — легко переоценить"},
+ {n:"Envato Elements",g:"Дизайн",t:"one",s:74,d:"warn",note:"30% / до $120; cookie 90 дн"},
+ {n:"Surfshark",g:"VPN",t:"hyb",s:72,d:"info",note:"тот же владелец, что NordVPN; cookie 30 дн"},
+ {n:"Target",g:"E-commerce",t:"one",s:72,d:"warn",note:"«до 8%» → реально 1–5%; cookie 7 дн (плюс)"},
+ {n:"DigitalOcean",g:"Хостинг",t:"rec",s:70,d:"info",note:"10% только 12 мес, узкая dev-аудитория"},
+ {n:"Chewy",g:"E-commerce",t:"one",s:70,d:"warn",note:"$15/нового клиента; высокая повторяемость покупок"},
+ {n:"Etsy",g:"E-commerce",t:"one",s:68,d:"warn",note:"4%, но cookie 30 дн — лучший в нише"},
+ {n:"Elementor",g:"No-code",t:"one",s:68,d:"info",note:"45–55% с 1-й покупки; жалобы на реверсы"},
+ {n:"Placeit",g:"Дизайн",t:"one",s:68,d:"info",note:"дубль кабинета Envato → в резерв"},
+ {n:"Proton",g:"VPN",t:"hyb",s:66,d:"info",note:"мало подтверждений выплат; разброс ставок"},
+ {n:"LearnWorlds",g:"Образование",t:"rec",s:66,d:"info",note:"неясно: платформенная 30% или школьная 10–50%"},
+ {n:"Podia",g:"Образование",t:"rec",s:66,d:"info",note:"20% ниже конкурентов; cookie короче триала"},
+ {n:"PIA",g:"VPN",t:"hyb",s:64,d:"info",note:"разброс ставок 24–80% — непредсказуемо"},
+ {n:"Bluehost",g:"Хостинг",t:"one",s:62,d:"info",note:"противоречивая модель; вопросы к трекингу"},
+ {n:"Skillshare",g:"Образование",t:"one",s:62,d:"info",note:"«40%» → реально ~20%/$34"},
+ {n:"Walmart",g:"E-commerce",t:"one",s:62,d:"info",note:"cookie 72 ч, 1–4%"},
+ {n:"Udemy",g:"Образование",t:"one",s:60,d:"info",note:"низкая ставка + скидки $10–15; cookie 7 дн"},
+ {n:"Amazon Associates",g:"E-commerce",t:"one",s:60,d:"info",note:"cookie 24 ч; срез ставок 2026; авто-закрытие без 3 продаж"},
+ {n:"Wix",g:"No-code",t:"one",s:58,d:"info",note:"$300 wire-only барьер; первая выплата 6–8 нед"},
+ {n:"Kajabi",g:"Образование",t:"rec",s:58,d:"info",note:"новичкам 10% (не 30%); нужно быть клиентом"},
+ {n:"eBay Partner Network",g:"E-commerce",t:"one",s:55,d:"info",note:"cookie 24 ч; кап на комиссию за транзакцию"},
+ {n:"Udacity",g:"Образование",t:"one",s:48,d:"info",note:"разброс 4%/8%/$100; мало данных"},
+ {n:"Creative Fabrica",g:"Дизайн",t:"rec",s:44,d:"info",note:"жалобы клиентов → риск реверса комиссий"},
+ {n:"Cloudways",g:"Хостинг",t:"hyb",s:36,d:"bad",note:"КРИТ: жалобы на удержание выплат (шейвинг)"},
+ {n:"Figma",g:"Дизайн",t:"one",s:35,d:"bad",note:"КРИТ: программа закрыта для новых аффилиатов"},
+ {n:"Best Buy",g:"E-commerce",t:"one",s:30,d:"bad",note:"КРИТ: базовая комиссия обнулена (0–0.5%)"},
+];
+const NICHES=["VPN","Хостинг","SaaS","Образование","E-commerce","No-code","Дизайн"];
+const $=(id)=>document.getElementById(id);
+let fNiche="all", fDec="all", q="", sortKey="score", sortDir=-1;
+
+// tiles
+function renderTiles(){
+  const c={all:DATA.length,ok:0,warn:0,info:0,bad:0};
+  DATA.forEach(p=>c[p.d]++);
+  const defs=[["Всего","all","var(--accent)",c.all],["Подтверждено","ok","var(--ok)",c.ok],
+    ["Тестировать","warn","var(--warn)",c.warn],["В резерве","info","var(--info)",c.info],
+    ["Отклонено","bad","var(--bad)",c.bad]];
+  $("tiles").innerHTML=defs.map(([k,,col,v])=>
+    `<div class="tile" style="--tc:${col}"><div class="k">${k}</div><div class="v" style="color:${col}">${v}</div></div>`).join("");
+}
+// chips
+function chip(label,val,cur){return `<button type="button" class="chip" data-v="${val}" aria-pressed="${cur===val}">${label}</button>`;}
+function renderChips(){
+  $("nicheChips").innerHTML=chip("Все","all",fNiche)+NICHES.map(n=>chip(n,n,fNiche)).join("");
+  $("decChips").innerHTML=chip("Все","all",fDec)+Object.entries(DEC).map(([k,v])=>chip(v[0].toUpperCase()+v.slice(1),k,fDec)).join("");
+}
+function barColor(d){return d==="ok"?"var(--ok)":d==="warn"?"var(--warn)":d==="bad"?"var(--bad)":"var(--info)";}
+function renderRows(){
+  let rows=DATA.filter(p=>(fNiche==="all"||p.g===fNiche)&&(fDec==="all"||p.d===fDec)&&
+    (q===""||p.n.toLowerCase().includes(q)));
+  rows.sort((a,b)=> sortKey==="score" ? (a.s-b.s)*sortDir : a.n.localeCompare(b.n)*sortDir );
+  $("rows").innerHTML=rows.map(p=>`<tr>
+    <td><div class="pname">${p.n}</div><div class="pnote">${p.note}</div></td>
+    <td><span class="niche">${p.g}</span></td>
+    <td><span class="type">${T[p.t]}</span></td>
+    <td><div class="scorewrap"><span class="bar"><i style="width:${p.s}%;background:${barColor(p.d)}"></i></span><span class="scoreval">${p.s}</span></div></td>
+    <td><span class="badge ${p.d}">${DEC[p.d]}</span></td>
+  </tr>`).join("");
+  $("empty").hidden=rows.length>0;
+  $("foot").innerHTML=`Показано <b>${rows.length}</b> из ${DATA.length}. Сортировка: ${sortKey==="score"?"по баллу":"по названию"} ${sortDir<0?"↓":"↑"}.`;
+}
+function render(){renderChips();renderRows();}
+
+$("nicheChips").addEventListener("click",e=>{const v=e.target.dataset.v;if(v){fNiche=v;render();}});
+$("decChips").addEventListener("click",e=>{const v=e.target.dataset.v;if(v){fDec=v;render();}});
+$("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();renderRows();});
+document.querySelectorAll("th.sortable").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.sort;
+  if(sortKey===k)sortDir*=-1; else {sortKey=k;sortDir=k==="score"?-1:1;}
+  document.querySelectorAll("th.sortable").forEach(x=>x.textContent=x.dataset.sort==="score"?"Балл":"Программа");
+  th.textContent=(k==="score"?"Балл":"Программа")+(sortDir<0?" ▾":" ▴");
+  renderRows();
+}));
+
+// theme
+const tb=$("themebtn");
+try{const sv=localStorage.getItem("aff-theme");if(sv)document.documentElement.setAttribute("data-theme",sv);}catch(e){}
+tb.addEventListener("click",()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const mq=window.matchMedia("(prefers-color-scheme:dark)").matches;
+  const nx=cur?(cur==="dark"?"light":"dark"):(mq?"light":"dark");
+  document.documentElement.setAttribute("data-theme",nx);
+  try{localStorage.setItem("aff-theme",nx);}catch(e){}
+});
+
+renderTiles();render();
+</script>
