@@ -78,7 +78,10 @@
 - Учёт дохода: `affiliate/knowledge-base/revenue.csv`
 - Критерии отбора: `affiliate/knowledge-base/criteria.md`
 - Промо/traffic-планы: `affiliate/reports/promo-plan-*`, `traffic-plan-*`
-- Черновики контента: `affiliate/content/<программа>/`
+- Черновики контента: `affiliate/content/<программа>/` — **16 черновиков готовы по 7 программам**
+  (Semrush ×4, HubSpot ×2, NordVPN ×2, Webflow ×2, Shopify ×2, Coursera ×2, Thinkific ×2);
+  у каждой из 7 есть promo-план и traffic-план. Перед публикацией: заменить `{{AFF_LINK}}`
+  и цифры «verify on …» на реальные.
 - Как работают агенты: `affiliate/README.md`
 
 ## Что могу сделать дальше (просто попроси)
