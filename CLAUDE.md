@@ -15,7 +15,7 @@
 - `.claude/agents/` — 7 субагентов: `affiliate-orchestrator`, `affiliate-scout`,
   `affiliate-analyst`, `affiliate-growth`, `affiliate-traffic`, `affiliate-content`,
   `affiliate-learner`.
-- `affiliate/knowledge-base/programs.csv` — реестр программ (42 шт.), 17 колонок. **Это CSV:
+- `affiliate/knowledge-base/programs.csv` — реестр программ (60 шт.), 17 колонок. **Это CSV:
   правь только через `csv`-парсер/`csv.writer` (поля с запятыми должны быть в кавычках).
   Ручная дозапись строк уже ломала выравнивание колонок — не повторяй.**
 - `affiliate/knowledge-base/revenue.csv` — фактический доход (единственный источник правды
@@ -60,7 +60,7 @@
 
 ## Текущее состояние (на 2026-09)
 
-42 программы проверены → 20 отобрано (7 «подтверждена», 13 «тестировать») → по 7 лидерам
+60 программ проверено → 28 отобрано (12 «подтверждена», 16 «тестировать») → по 7 лидерам ниш
 (Semrush, HubSpot, NordVPN, Webflow, Shopify, Coursera, Thinkific) готов полный пакет
 (promo + traffic + ≥2 черновика). Реальных выплат ещё нет — ждём, когда пользователь
 вступит в программы, запустит трафик и внесёт цифры в `revenue.csv`, после чего запускается

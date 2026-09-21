@@ -72,7 +72,7 @@
 ---
 
 ## Карта готовых материалов
-- **Дашборд** (42 программы, фильтры): https://claude.ai/code/artifact/b51145d2-8fea-4f2b-890d-5e7d8d1616ec
+- **Дашборд** (60 программ, фильтры): https://claude.ai/artifact/PMpcxSjRrLn7L35NY4eCu1
 - **Калькулятор дохода** (+ слой рекламы): https://claude.ai/code/artifact/e8841462-e8c5-4554-a7ff-c364ea96d21f
 - Реестр программ: `affiliate/knowledge-base/programs.csv`
 - Учёт дохода: `affiliate/knowledge-base/revenue.csv`
